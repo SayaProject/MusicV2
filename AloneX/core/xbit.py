@@ -29,6 +29,68 @@ class XBitAPI:
         
         return None
 
+    async def search(self, query: str, message_id: int, video: bool = False):
+        if not self.api_key:
+            return None
+        
+        endpoint = f"{self.base_url}/search"
+        params = {'query': query}
+        headers = {'x-api-key': self.api_key}
+        
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(endpoint, params=params, headers=headers) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        if data.get('status') == 'success' and data.get('results'):
+                            from AloneX.helpers._dataclass import Media
+                            res = data['results'][0]
+                            return Media(
+                                id=res['id'],
+                                title=res['title'],
+                                duration=res['duration'],
+                                duration_sec=res['duration_sec'],
+                                url=res['url'],
+                                file_path=None,
+                                message_id=message_id,
+                                video=video
+                            )
+        except Exception as e:
+            print(f"Error searching from XBit API: {e}")
+        return None
+
+    async def playlist(self, limit: int, mention: str, url: str, video: bool = False):
+        if not self.api_key:
+            return None
+        
+        endpoint = f"{self.base_url}/playlist"
+        params = {'url': url, 'limit': limit}
+        headers = {'x-api-key': self.api_key}
+        
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(endpoint, params=params, headers=headers) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        if data.get('status') == 'success' and data.get('results'):
+                            from AloneX.helpers._dataclass import Track
+                            tracks = []
+                            for res in data['results']:
+                                tracks.append(Track(
+                                    id=res['id'],
+                                    channel_name=res.get('channel', "Unknown"),
+                                    duration=res['duration'],
+                                    duration_sec=res['duration_sec'],
+                                    title=res['title'],
+                                    url=res['url'],
+                                    user=mention,
+                                    video=video
+                                ))
+                            return tracks
+        except Exception as e:
+            print(f"Error fetching playlist from XBit API: {e}")
+        return None
+
     async def download(self, vid_id: str, video: bool = False):
         path = f"downloads/{vid_id}.{'mp4' if video else 'mp3'}"
         import os

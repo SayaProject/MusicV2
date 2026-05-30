@@ -73,9 +73,12 @@ async def play_hndlr(
     if url:
         if "playlist" in url:
             await sent.edit_text(m.lang["playlist_fetch"])
-            tracks = await yt.playlist(
-                config.PLAYLIST_LIMIT, mention, url, video
-            )
+            if config.XBIT_API_TOKEN:
+                tracks = await xbit.playlist(config.PLAYLIST_LIMIT, mention, url, video)
+            if not tracks:
+                tracks = await yt.playlist(
+                    config.PLAYLIST_LIMIT, mention, url, video
+                )
 
             if not tracks:
                 return await sent.edit_text(m.lang["playlist_error"])
@@ -84,7 +87,10 @@ async def play_hndlr(
             tracks.remove(file)
             file.message_id = sent.id
         else:
-            file = await yt.search(url, sent.id, video=video)
+            if config.XBIT_API_TOKEN:
+                file = await xbit.search(url, sent.id, video=video)
+            if not file:
+                file = await yt.search(url, sent.id, video=video)
 
         if not file:
             return await sent.edit_text(
@@ -93,7 +99,10 @@ async def play_hndlr(
 
     elif len(m.command) >= 2:
         query = " ".join(m.command[1:])
-        file = await yt.search(query, sent.id, video=video)
+        if config.XBIT_API_TOKEN:
+            file = await xbit.search(query, sent.id, video=video)
+        if not file:
+            file = await yt.search(query, sent.id, video=video)
         if not file:
             return await sent.edit_text(
                 m.lang["play_not_found"].format(config.SUPPORT_CHAT)
