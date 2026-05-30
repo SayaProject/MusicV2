@@ -164,12 +164,20 @@ async def _help(_, query: types.CallbackQuery):
     elif data[1] == "close":
         try:
             await query.message.delete()
-            return await query.message.reply_to_message.delete()
         except:
-            return
+            pass
+        try:
+            await query.message.reply_to_message.delete()
+        except:
+            pass
+        return
+
+    help_key = f"help_{data[1]}"
+    if help_key not in query.lang:
+        return await query.answer(f"Help for '{data[1]}' not found.", show_alert=True)
 
     await query.edit_message_text(
-        text=query.lang[f"help_{data[1]}"],
+        text=query.lang[help_key],
         reply_markup=buttons.help_markup(query.lang, True),
     )
 

@@ -118,15 +118,20 @@ class TgCall(PyTgCalls):
         except exceptions.NoAudioSourceFound:
             logger.error(f"No audio source found for {media.title} ({media.id}) at {media.file_path}")
             if media.file_path.startswith(("http://", "https://")):
+                logger.info(f"Attempting fallback download for {media.id}...")
                 await message.edit_text(_lang["play_downloading"])
                 try:
                     from AloneX import yt
+                    # Force local download by using yt directly
                     local_path = await yt.download(media.id, video=media.video)
                     if local_path and not local_path.startswith(("http://", "https://")):
+                        logger.info(f"Fallback download successful: {local_path}")
                         media.file_path = local_path
                         return await self.play_media(chat_id, message, media, seek_time)
+                    else:
+                        logger.error(f"Fallback download failed to return a local path for {media.id}. Got: {local_path}")
                 except Exception as e:
-                    logger.error(f"Fallback download failed for {media.id}: {e}")
+                    logger.exception(f"Fallback download failed for {media.id}: {e}")
 
             await message.edit_text(_lang["error_no_audio"])
             await self.play_next(chat_id)
