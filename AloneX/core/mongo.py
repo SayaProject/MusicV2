@@ -347,6 +347,7 @@ class MongoDB:
         return await self.mediadb.find_one({"_id": vid_id})
 
     async def save_media_cache(self, vid_id: str, data: dict) -> None:
+        data.pop("_id", None)
         await self.mediadb.update_one(
             {"_id": vid_id},
             {"$set": data},
