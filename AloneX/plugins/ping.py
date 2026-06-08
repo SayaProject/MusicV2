@@ -30,6 +30,7 @@ async def _ping(_, m: types.Message):
                 psutil.disk_usage("/").percent,
                 await anon.ping(),
             ),
+            has_spoiler=True,
         ),
         reply_markup=buttons.ping_markup(m.lang["support"]),
     )

@@ -39,7 +39,7 @@ class MongoDB:
         self.chats = []
         self.chatsdb = self.db.chats
         self.mediadb = self.db.media
-        self.querydb = self.db.query
+        self.querydb = self.db.query_cache
 
         self.lang = {}
         self.langdb = self.db.lang
@@ -359,7 +359,6 @@ class MongoDB:
         return await self.querydb.find_one({"_id": query.lower().strip()})
 
     async def save_query_cache(self, query: str, data: dict) -> None:
-        data.pop("_id", None)
         await self.querydb.update_one(
             {"_id": query.lower().strip()},
             {"$set": data},
