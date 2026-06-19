@@ -98,29 +98,33 @@ class XBitAPI:
             return path
 
         if self.api_key:
-            data = await self.get_info(vid_id)
-            if data:
-                url = data.get("video_url") if video else data.get("audio_url")
-                if url:
-                    try:
-                        async with aiohttp.ClientSession() as session:
-                            async with session.get(url, timeout=30) as response:
-                                if response.status == 200:
-                                    with open(path, "wb") as f:
-                                        async for chunk in response.content.iter_chunked(1024 * 1024):
-                                            f.write(chunk)
-                                    if os.path.exists(path) and os.path.getsize(path) > 1024:
-                                        return path
-                                    else:
-                                        print(f"Downloaded file is too small or missing for {vid_id}")
-                                else:
-                                    print(f"XBit download failed with status {response.status} for {vid_id}")
-                    except Exception as e:
-                        print(f"Error downloading from XBit URL: {e}")
-                else:
-                    print(f"No stream URL found in XBit info for {vid_id}")
-            else:
-                print(f"Failed to fetch info from XBit API for {vid_id}")
+            # Use the new API endpoint format
+            youtube_url = f"https://www.youtube.com/watch?v={vid_id}"
+            endpoint = f"{self.base_url}/download"
+            params = {
+                'url': youtube_url,
+                'type': 'video' if video else 'audio',
+                'api_key': self.api_key
+            }
+            
+            try:
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(endpoint, params=params, timeout=60) as response:
+                        if response.status == 200:
+                            with open(path, "wb") as f:
+                                async for chunk in response.content.iter_chunked(1024 * 1024):
+                                    f.write(chunk)
+                            if os.path.exists(path) and os.path.getsize(path) > 1024:
+                                print(f"Successfully downloaded {vid_id} using new API")
+                                return path
+                            else:
+                                print(f"Downloaded file is too small or missing for {vid_id}")
+                        else:
+                            print(f"API download failed with status {response.status} for {vid_id}")
+                            error_text = await response.text()
+                            print(f"Error response: {error_text}")
+            except Exception as e:
+                print(f"Error downloading from new API: {e}")
         
         print(f"Falling back to YouTube download for {vid_id}...")
         from AloneX import yt
