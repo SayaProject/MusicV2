@@ -41,8 +41,8 @@ class Config:
             if url.strip(" `\"'")
         ]
 
-        self.XBIT_API_TOKEN = getenv("XBIT_API_TOKEN", None)
-        self.XBIT_API_URL = getenv("XBIT_API_URL", "https://tgapi.xbitcode.com")
+        self.XBIT_API_TOKEN = getenv("XBIT_API_TOKEN", "ARU-djjKdQDX3hk12YJsXStOtJW0")
+        self.XBIT_API_URL = getenv("XBIT_API_URL", "https://aruyt-production.up.railway.app")
         self.GIT_REPO = getenv("GIT_REPO", "https://github.com/nishkarshk212/Telegram_music")
 
     def check(self):
