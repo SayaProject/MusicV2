@@ -49,7 +49,9 @@ class TgCall(PyTgCalls):
         media: Media | Track,
         seek_time: int = 0,
     ) -> None:
+        logger.info(f"[DEBUG] Starting play_media for chat_id {chat_id}")
         client = await db.get_assistant(chat_id)
+        logger.info(f"[DEBUG] Got assistant client for chat {chat_id}")
         _lang = await lang.get_lang(chat_id)
         _thumb = (
             await thumb.generate(media)
@@ -58,31 +60,44 @@ class TgCall(PyTgCalls):
         )
 
         if not media.file_path:
+            logger.error(f"[DEBUG] No file_path for media {media.id}")
             await message.edit_text(_lang["error_no_file"].format(config.SUPPORT_CHAT))
             return await self.play_next(chat_id)
+        
+        logger.info(f"[DEBUG] Using media file: {media.file_path}")
 
         ffmpeg_args = "-analyzeduration 20M -probesize 20M -bufsize 2000k -maxrate 2000k -thread_queue_size 4096 -threads auto"
         if seek_time > 1:
             ffmpeg_args += f" -ss {seek_time}"
+        
+        logger.info(f"[DEBUG] FFmpeg args: {ffmpeg_args}")
 
-        stream = types.MediaStream(
-            media_path=media.file_path,
-            audio_parameters=types.AudioQuality.HIGH,
-            video_parameters=types.VideoQuality.FHD_1080p,
-            audio_flags=types.MediaStream.Flags.REQUIRED,
-            video_flags=(
-                types.MediaStream.Flags.AUTO_DETECT
-                if media.video
-                else types.MediaStream.Flags.IGNORE
-            ),
-            ffmpeg_parameters=ffmpeg_args,
-        )
         try:
+            stream = types.MediaStream(
+                media_path=media.file_path,
+                audio_parameters=types.AudioQuality.HIGH,
+                video_parameters=types.VideoQuality.FHD_1080p,
+                audio_flags=types.MediaStream.Flags.REQUIRED,
+                video_flags=(
+                    types.MediaStream.Flags.AUTO_DETECT
+                    if media.video
+                    else types.MediaStream.Flags.IGNORE
+                ),
+                ffmpeg_parameters=ffmpeg_args,
+            )
+            logger.info("[DEBUG] Created MediaStream successfully")
+        except Exception as e:
+            logger.exception(f"[DEBUG] Failed to create MediaStream: {e}")
+            return await self.play_next(chat_id)
+
+        try:
+            logger.info("[DEBUG] Calling client.play() now")
             await client.play(
                 chat_id=chat_id,
                 stream=stream,
                 config=types.GroupCallConfig(auto_start=True),
             )
+            logger.info("[DEBUG] client.play() returned successfully")
             if not seek_time:
                 media.time = 1
                 await db.add_call(chat_id)
@@ -115,6 +130,7 @@ class TgCall(PyTgCalls):
             await message.edit_text(_lang["error_no_file"].format(config.SUPPORT_CHAT))
             await self.play_next(chat_id)
         except exceptions.NoActiveGroupCall:
+            logger.exception("[DEBUG] NoActiveGroupCall")
             await self.stop(chat_id)
             await message.edit_text(_lang["error_no_call"])
         except exceptions.NoAudioSourceFound:
