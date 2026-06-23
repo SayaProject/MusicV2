@@ -72,6 +72,11 @@ class MongoDB:
 
     async def add_call(self, chat_id: int) -> None:
         self.active_calls[chat_id] = 1
+        await self.chatsdb.update_one(
+            {"_id": chat_id},
+            {"$set": {"last_played": time()}},
+            upsert=True
+        )
 
     async def remove_call(self, chat_id: int) -> None:
         self.active_calls.pop(chat_id, None)
