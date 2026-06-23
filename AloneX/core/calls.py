@@ -97,7 +97,7 @@ class TgCall(PyTgCalls):
             stream = types.MediaStream(
                 media_path=media.file_path,
                 audio_parameters=types.AudioQuality.HIGH,
-                video_parameters=types.VideoQuality.FHD_1080p,
+                video_parameters=types.VideoQuality.HD,
                 audio_flags=types.MediaStream.Flags.REQUIRED,
                 video_flags=(
                     types.MediaStream.Flags.AUTO_DETECT
@@ -288,9 +288,12 @@ class TgCall(PyTgCalls):
 
     async def boot(self) -> None:
         PyTgCallsSession.notice_displayed = True
+        import logging
+        # Set pytgcalls logging to DEBUG
+        logging.getLogger("pytgcalls").setLevel(logging.DEBUG)
         for ub in userbot.clients:
             client = PyTgCalls(ub, cache_duration=100)
             await client.start()
             self.clients.append(client)
             await self.decorators(client)
-        logger.info("PyTgCalls client(s) started.")
+        logger.info("PyTgCalls client(s) started (DEBUG MODE).")
