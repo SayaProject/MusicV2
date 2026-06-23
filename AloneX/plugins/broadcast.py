@@ -56,7 +56,7 @@ async def _broadcast(_, message: types.Message):
         try:
             (
                 await msg.copy(chat, reply_markup=msg.reply_markup)
-                if "-copy" in message.text
+                if "-copy" in message.command
                 else await msg.forward(chat)
             )
             if chat in groups:
