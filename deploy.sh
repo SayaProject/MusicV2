@@ -18,20 +18,20 @@ then
 fi
 
 echo "Step 1: Connecting to server and updating code..."
-sshpass -p "$SERVER_PASS" ssh -o StrictHostKeyChecking=no -p $SERVER_PORT $SERVER_USER@$SERVER_IP << 'EOF'
+sshpass -p "$SERVER_PASS" ssh -o StrictHostKeyChecking=no -p $SERVER_PORT $SERVER_USER@$SERVER_IP << EOF
     echo "Connected to server successfully"
     
     # Navigate to bot directory
     if [ -d "$BOT_DIR" ]; then
-        cd $BOT_DIR
+        cd "$BOT_DIR"
         echo "Updating existing repository..."
         git fetch origin
         git reset --hard origin/main
         git pull origin main
     else
         echo "Cloning repository for first time..."
-        git clone $REPO_URL $BOT_DIR
-        cd $BOT_DIR
+        git clone "$REPO_URL" "$BOT_DIR"
+        cd "$BOT_DIR"
     fi
     
     echo "Step 2: Installing dependencies..."
