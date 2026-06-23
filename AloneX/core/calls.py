@@ -65,6 +65,27 @@ class TgCall(PyTgCalls):
             return await self.play_next(chat_id)
         
         logger.info(f"[DEBUG] Using media file: {media.file_path}")
+        
+        # Verify local file if applicable
+        from pathlib import Path
+        if not media.file_path.startswith("http"):
+            file_path = Path(media.file_path)
+            logger.info(f"[DEBUG] Checking local file exists: {file_path.exists()}, size: {file_path.stat().st_size if file_path.exists() else -1}")
+            if not file_path.exists() or file_path.stat().st_size == 0:
+                logger.error(f"[DEBUG] Local file invalid, trying fallback download")
+                await message.edit_text(_lang["play_downloading"])
+                from AloneX import xbit
+                try:
+                    local_path = await xbit.download(media.id, video=media.video)
+                    if local_path and not local_path.startswith("http") and Path(local_path).exists():
+                        media.file_path = local_path
+                        logger.info(f"[DEBUG] Fallback successful, new path: {media.file_path}")
+                    else:
+                        raise Exception("Fallback download didn't produce valid file")
+                except Exception as e:
+                    logger.exception(f"[DEBUG] Fallback failed: {e}")
+                    await message.edit_text(_lang["error_no_file"].format(config.SUPPORT_CHAT))
+                    return await self.play_next(chat_id)
 
         ffmpeg_args = "-analyzeduration 20M -probesize 20M -bufsize 2000k -maxrate 2000k -thread_queue_size 4096 -threads auto"
         if seek_time > 1:
@@ -242,7 +263,9 @@ class TgCall(PyTgCalls):
     async def decorators(self, client: PyTgCalls) -> None:
         @client.on_update()
         async def update_handler(_, update: types.Update) -> None:
+            logger.info(f"[DEBUG] Got update: {type(update)} - {update}")
             if isinstance(update, types.StreamEnded):
+                logger.info(f"[DEBUG] StreamEnded: {update}")
                 if update.stream_type == types.StreamEnded.Type.AUDIO:
                     chat_id = update.chat_id
                     if await db.get_playmsg_delete(chat_id):
@@ -254,6 +277,7 @@ class TgCall(PyTgCalls):
                                 pass
                     await self.play_next(chat_id)
             elif isinstance(update, types.ChatUpdate):
+                logger.info(f"[DEBUG] ChatUpdate status: {update.status}")
                 if update.status in [
                     types.ChatUpdate.Status.KICKED,
                     types.ChatUpdate.Status.LEFT_GROUP,
