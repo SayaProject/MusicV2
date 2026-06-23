@@ -68,7 +68,7 @@ class TgCall(PyTgCalls):
         stream = types.MediaStream(
             media_path=media.file_path,
             audio_parameters=types.AudioQuality.HIGH,
-            video_parameters=types.VideoQuality.HD_1080p,
+            video_parameters=types.VideoQuality.HD,
             audio_flags=types.MediaStream.Flags.REQUIRED,
             video_flags=(
                 types.MediaStream.Flags.AUTO_DETECT
