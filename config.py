@@ -43,6 +43,8 @@ class Config:
 
         self.XBIT_API_TOKEN = getenv("XBIT_API_TOKEN", None)
         self.XBIT_API_URL = getenv("XBIT_API_URL", None)
+        self.ARU_API_KEY = getenv("ARU_API_KEY", None)
+        self.ARU_API_URL = getenv("ARU_API_URL", None)
         self.GIT_REPO = getenv("GIT_REPO", "https://github.com/nishkarshk212/Telegram_music")
 
     def check(self):
