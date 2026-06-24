@@ -47,10 +47,10 @@ class XBitAPI:
         if self.xbit_api_key and self.xbit_base_url:
             try:
                 info = await self.get_info(vid_id)
-                if info and 'data' in info:
+                if info:
                     url_key = 'video_url' if video else 'audio_url'
-                    if url_key in info['data'] and info['data'][url_key]:
-                        direct_url = info['data'][url_key]
+                    if url_key in info and info[url_key]:
+                        direct_url = info[url_key]
                         print(f"Successfully got direct URL for {vid_id} using XBit API")
                         return direct_url
             except Exception as e:
