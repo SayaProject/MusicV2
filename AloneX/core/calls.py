@@ -62,9 +62,15 @@ class TgCall(PyTgCalls):
             else config.DEFAULT_THUMB 
         ) 
 
-        if not media.file_path: 
-            logger.error(f"[play_media] media.file_path is empty!") 
-            await message.edit_text(_lang["error_no_file"].format(config.SUPPORT_CHAT)) 
+        if not media.file_path:
+            logger.error(f"[play_media] media.file_path is empty!")
+            key = buttons.ikm([
+                [
+                    buttons.ikb(text=_lang["support"], url=config.SUPPORT_CHAT),
+                    buttons.ikb(text=_lang["channel"], url=config.SUPPORT_CHANNEL),
+                ]
+            ])
+            await message.edit_text(_lang["error_no_file"].format(config.SUPPORT_CHAT), reply_markup=key)
             return await self.play_next(chat_id) 
         logger.info(f"[play_media] Using file_path: {media.file_path}") 
 
@@ -121,7 +127,13 @@ class TgCall(PyTgCalls):
                     )).id 
         except FileNotFoundError as e: 
             logger.error(f"[play_media] FileNotFoundError: {e}, file: {media.file_path}") 
-            await message.edit_text(_lang["error_no_file"].format(config.SUPPORT_CHAT)) 
+            key = buttons.ikm([
+                [
+                    buttons.ikb(text=_lang["support"], url=config.SUPPORT_CHAT),
+                    buttons.ikb(text=_lang["channel"], url=config.SUPPORT_CHANNEL),
+                ]
+            ])
+            await message.edit_text(_lang["error_no_file"].format(config.SUPPORT_CHAT), reply_markup=key) 
             await self.play_next(chat_id) 
         except exceptions.NoActiveGroupCall as e: 
             logger.error(f"[play_media] NoActiveGroupCall: {e}") 
@@ -213,8 +225,15 @@ class TgCall(PyTgCalls):
             
             if not media.file_path: 
                 await self.stop(chat_id) 
+                key = buttons.ikm([
+                    [
+                        buttons.ikb(text=_lang["support"], url=config.SUPPORT_CHAT),
+                        buttons.ikb(text=_lang["channel"], url=config.SUPPORT_CHANNEL),
+                    ]
+                ])
                 return await msg.edit_text( 
-                    _lang["error_no_file"].format(config.SUPPORT_CHAT) 
+                    _lang["error_no_file"].format(config.SUPPORT_CHAT),
+                    reply_markup=key
                 ) 
             
             # Verify local file 
@@ -222,8 +241,15 @@ class TgCall(PyTgCalls):
             if media.file_path and not (media.file_path.startswith("http") or media.file_path.startswith("https")): 
                 if not Path(media.file_path).exists() or Path(media.file_path).stat().st_size == 0: 
                     await self.stop(chat_id) 
+                    key = buttons.ikm([
+                        [
+                            buttons.ikb(text=_lang["support"], url=config.SUPPORT_CHAT),
+                            buttons.ikb(text=_lang["channel"], url=config.SUPPORT_CHANNEL),
+                        ]
+                    ])
                     return await msg.edit_text( 
-                        _lang["error_no_file"].format(config.SUPPORT_CHAT) 
+                        _lang["error_no_file"].format(config.SUPPORT_CHAT),
+                        reply_markup=key
                     ) 
 
         media.message_id = msg.id 

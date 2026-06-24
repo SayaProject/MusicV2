@@ -98,8 +98,15 @@ async def play_hndlr(
                 file = await yt.search(url, sent.id, video=video)
 
         if not file:
+            key = buttons.ikm([
+                [
+                    buttons.ikb(text=m.lang["support"], url=config.SUPPORT_CHAT),
+                    buttons.ikb(text=m.lang["channel"], url=config.SUPPORT_CHANNEL),
+                ]
+            ])
             return await sent.edit_text(
-                m.lang["play_not_found"].format(config.SUPPORT_CHAT)
+                m.lang["play_not_found"].format(config.SUPPORT_CHAT),
+                reply_markup=key
             )
 
     elif len(m.command) >= 2:
@@ -121,8 +128,15 @@ async def play_hndlr(
                 await db.save_query_cache(query, dataclasses.asdict(file))
         
         if not file:
+            key = buttons.ikm([
+                [
+                    buttons.ikb(text=m.lang["support"], url=config.SUPPORT_CHAT),
+                    buttons.ikb(text=m.lang["channel"], url=config.SUPPORT_CHANNEL),
+                ]
+            ])
             return await sent.edit_text(
-                m.lang["play_not_found"].format(config.SUPPORT_CHAT)
+                m.lang["play_not_found"].format(config.SUPPORT_CHAT),
+                reply_markup=key
             )
 
     elif media:
@@ -197,7 +211,13 @@ async def play_hndlr(
         # Verify local file
         if file.file_path and not (file.file_path.startswith("http") or file.file_path.startswith("https")):
             if not Path(file.file_path).exists() or Path(file.file_path).stat().st_size == 0:
-                return await sent.edit_text(m.lang["error_no_file"].format(config.SUPPORT_CHAT))
+                key = buttons.ikm([
+                    [
+                        buttons.ikb(text=m.lang["support"], url=config.SUPPORT_CHAT),
+                        buttons.ikb(text=m.lang["channel"], url=config.SUPPORT_CHANNEL),
+                    ]
+                ])
+                return await sent.edit_text(m.lang["error_no_file"].format(config.SUPPORT_CHAT), reply_markup=key)
 
     await anon.play_media(chat_id=m.chat.id, message=sent, media=file)
     if not tracks:
