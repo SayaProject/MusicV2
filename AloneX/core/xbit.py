@@ -10,13 +10,30 @@ class XBitAPI:
         self.aru_base_url = config.ARU_API_URL
 
     async def get_info(self, vid_id: str):
+        # Try XBit first (working!)
+        if self.xbit_api_key and self.xbit_base_url:
+            endpoint = f"{self.xbit_base_url}/info/{vid_id}"
+            headers = {
+                'x-api-key': self.xbit_api_key,
+                'Content-Type': 'application/json'
+            }
+            try:
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(endpoint, headers=headers) as response:
+                        if response.status == 200:
+                            data = await response.json()
+                            if data.get('status') == 'success':
+                                return data
+            except Exception as e:
+                print(f"Error fetching from XBit API: {e}")
+        
         return None
 
     async def search(self, query: str, message_id: int, video: bool = False):
-        return None
+        return None  # No working search endpoint yet
 
     async def playlist(self, limit: int, mention: str, url: str, video: bool = False):
-        return None
+        return None  # No working playlist endpoint yet
 
     async def download(self, vid_id: str, video: bool = False):
         import os
@@ -26,10 +43,22 @@ class XBitAPI:
 
         youtube_url = f"https://www.youtube.com/watch?v={vid_id}"
         
-        # Try ARU first with direct URL for fast play
+        # Try XBit first with direct URL
+        if self.xbit_api_key and self.xbit_base_url:
+            try:
+                info = await self.get_info(vid_id)
+                if info and 'data' in info:
+                    url_key = 'video_url' if video else 'audio_url'
+                    if url_key in info['data'] and info['data'][url_key]:
+                        direct_url = info['data'][url_key]
+                        print(f"Successfully got direct URL for {vid_id} using XBit API")
+                        return direct_url
+            except Exception as e:
+                print(f"Error getting direct URL from XBit API: {e}")
+        
+        # Fallback to ARU
         if self.aru_api_key and self.aru_base_url:
             direct_url = f"{self.aru_base_url}/download?url={youtube_url}&type={'video' if video else 'audio'}&api_key={self.aru_api_key}"
-            # Verify the URL is reachable first
             try:
                 async with aiohttp.ClientSession() as session:
                     async with session.head(direct_url, timeout=10) as resp:
@@ -39,19 +68,16 @@ class XBitAPI:
             except Exception as e:
                 print(f"Error checking ARU direct URL for {vid_id}: {e}")
             
-            # If direct URL didn't work, download the file
             try:
                 async with aiohttp.ClientSession() as session:
                     async with session.get(direct_url, timeout=300) as response:
                         if response.status == 200:
                             with open(path, "wb") as f:
-                                async for chunk in response.content.iter_chunked(1024 * 1024):  # 1MB chunks for speed
+                                async for chunk in response.content.iter_chunked(1024 * 1024):
                                     f.write(chunk)
                             if os.path.exists(path) and os.path.getsize(path) > 1024:
                                 print(f"Successfully downloaded {vid_id} using ARU API")
                                 return path
-                            else:
-                                print(f"Downloaded file is too small or missing for {vid_id} (ARU)")
             except Exception as e:
                 print(f"Error downloading from ARU API: {e}")
         
