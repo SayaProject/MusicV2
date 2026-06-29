@@ -272,31 +272,70 @@ class TgCall(PyTgCalls):
         return round(sum(pings) / len(pings), 2) 
 
 
-    async def decorators(self, client: PyTgCalls) -> None: 
-        from AloneX import app, db, logger, queue 
-        @client.on_update() 
-        async def update_handler(_, update: types.Update) -> None: 
+    async def decorators(self, client: PyTgCalls) -> None:
+        from AloneX import app, db, logger, queue
+        @client.on_update()
+        async def update_handler(_, update: types.Update) -> None:
             logger.info(f"[pytgcalls] Update received: {type(update)}")
-            if isinstance(update, types.StreamEnded): 
+            if isinstance(update, types.StreamEnded):
                 logger.info(f"[pytgcalls] Stream ended: {update}")
-                if update.stream_type == types.StreamEnded.Type.AUDIO: 
-                    chat_id = update.chat_id 
-                    if await db.get_playmsg_delete(chat_id): 
-                        media = queue.get_current(chat_id) 
-                        if media and media.message_id: 
-                            try: 
-                                await app.delete_messages(chat_id, media.message_id) 
-                            except: 
-                                pass 
-                    await self.play_next(chat_id) 
-            elif isinstance(update, types.ChatUpdate): 
+                if update.stream_type == types.StreamEnded.Type.AUDIO:
+                    chat_id = update.chat_id
+                    if await db.get_playmsg_delete(chat_id):
+                        media = queue.get_current(chat_id)
+                        if media and media.message_id:
+                            try:
+                                await app.delete_messages(chat_id, media.message_id)
+                            except:
+                                pass
+                    await self.play_next(chat_id)
+            elif isinstance(update, types.ChatUpdate):
                 logger.info(f"[pytgcalls] Chat update: {update}")
-                if update.status in [ 
-                    types.ChatUpdate.Status.KICKED, 
-                    types.ChatUpdate.Status.LEFT_GROUP, 
-                    types.ChatUpdate.Status.CLOSED_VOICE_CHAT, 
-                ]: 
-                    await self.stop(update.chat_id) 
+                if update.status in [
+                    types.ChatUpdate.Status.KICKED,
+                    types.ChatUpdate.Status.LEFT_GROUP,
+                    types.ChatUpdate.Status.CLOSED_VOICE_CHAT,
+                ]:
+                    await self.stop(update.chat_id)
+
+            elif isinstance(update, types.UpdatedGroupCallParticipant):
+                # ── Voice Chat Join Notification ─────────────────────────────
+                if update.action == types.GroupCallParticipant.Action.JOINED:
+                    import asyncio as _asyncio
+                    chat_id = update.chat_id
+                    user_id = update.participant.user_id
+                    try:
+                        user = await app.get_users(user_id)
+                        name = user.first_name or "Unknown"
+                        if user.last_name:
+                            name += f" {user.last_name}"
+                        mention = user.mention
+                    except Exception:
+                        name = str(user_id)
+                        mention = str(user_id)
+
+                    text = (
+                        f"<blockquote>"
+                        f"#𝙅ᴏɪɴ𝙑ɪᴅᴇᴏ𝘾ʜᴀᴛ\n\n"
+                        f"𝙉ᴀᴍᴇ :  {mention}\n"
+                        f"ɪᴅ :  <code>{user_id}</code>\n"
+                        f"𝘼ᴄᴛɪᴏɴ :  Joined Voice Chat 🎙️"
+                        f"</blockquote>"
+                    )
+                    try:
+                        msg = await app.send_message(
+                            chat_id=chat_id,
+                            text=text,
+                            disable_web_page_preview=True,
+                        )
+                        await _asyncio.sleep(5)
+                        await app.delete_messages(
+                            chat_id=chat_id,
+                            message_ids=msg.id,
+                            revoke=True,
+                        )
+                    except Exception as e:
+                        logger.error(f"[vc_join] Failed to send/delete join msg: {e}") 
 
 
     async def boot(self) -> None: 
