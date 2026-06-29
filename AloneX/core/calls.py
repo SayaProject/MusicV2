@@ -4,8 +4,8 @@
 # This file is part of AloneX 
 # ALONE-CODER 
 
-from ntgcalls import (ConnectionNotFound, TelegramServerError, 
-                      RTMPStreamingUnsupported) 
+# pyrefly: ignore [missing-import]
+from ntgcalls import (ConnectionNotFound, TelegramServerError, RTMPStreamingUnsupported) 
 from pyrogram.errors import MessageIdInvalid 
 from pyrogram.types import InputMediaPhoto, Message 
 from pytgcalls import PyTgCalls, exceptions, types 
