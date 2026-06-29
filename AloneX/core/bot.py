@@ -53,6 +53,8 @@ class Bot(pyrogram.Client):
         Raises:
             SystemExit: If the bot fails to access the log group or is not an administrator in the logger group.
         """
+        import asyncio
+
         await super().start()
         self.id = self.me.id
         self.name = self.me.first_name
@@ -60,7 +62,73 @@ class Bot(pyrogram.Client):
         self.mention = self.me.mention
 
         try:
-            await self.send_message(self.logger, "Bot Started", disable_web_page_preview=True)
+            # ── Step 1 : Loading Modules ─────────────────────────────────────
+            msg = await self.send_message(
+                self.logger,
+                "⚡  <b>𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</b>\n▰▱▱▱▱  20%",
+                disable_web_page_preview=True,
+            )
+            await asyncio.sleep(1.2)
+
+            # ── Step 2 : Connecting Voice Chat ───────────────────────────────
+            await self.edit_message_text(
+                self.logger,
+                msg.id,
+                "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
+                "🎧  <b>𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</b>\n▰▰▱▱▱  40%",
+                disable_web_page_preview=True,
+            )
+            await asyncio.sleep(1.2)
+
+            # ── Step 3 : Loading Plugins ─────────────────────────────────────
+            await self.edit_message_text(
+                self.logger,
+                msg.id,
+                "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
+                "<s>🎧  𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✅\n"
+                "🔌  <b>𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</b>\n▰▰▰▱▱  60%",
+                disable_web_page_preview=True,
+            )
+            await asyncio.sleep(1.2)
+
+            # ── Step 4 : Initialising ────────────────────────────────────────
+            await self.edit_message_text(
+                self.logger,
+                msg.id,
+                "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
+                "<s>🎧  𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✅\n"
+                "<s>🔌  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</s> ✅\n"
+                "⚙️  <b>𝑰𝒏𝒊𝒕𝒊𝒂𝒍𝒊𝒔𝒊𝒏𝒈...</b>\n▰▰▰▰▱  80%",
+                disable_web_page_preview=True,
+            )
+            await asyncio.sleep(1.2)
+
+            # ── Step 5 : Almost Ready ────────────────────────────────────────
+            await self.edit_message_text(
+                self.logger,
+                msg.id,
+                "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
+                "<s>🎧  𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✅\n"
+                "<s>🔌  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</s> ✅\n"
+                "<s>⚙️  𝑰𝒏𝒊𝒕𝒊𝒂𝒍𝒊𝒔𝒊𝒏𝒈...</s> ✅\n"
+                "🚀  <b>𝑨𝒍𝒎𝒐𝒔𝒕 𝑹𝒆𝒂𝒅𝒚...</b>\n▰▰▰▰▰  100%",
+                disable_web_page_preview=True,
+            )
+            await asyncio.sleep(1.2)
+
+            # ── Final : Bot is Online ────────────────────────────────────────
+            await self.edit_message_text(
+                self.logger,
+                msg.id,
+                "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
+                "<s>🎧  𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✅\n"
+                "<s>🔌  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</s> ✅\n"
+                "<s>⚙️  𝑰𝒏𝒊𝒕𝒊𝒂𝒍𝒊𝒔𝒊𝒏𝒈...</s> ✅\n"
+                "<s>🚀  𝑨𝒍𝒎𝒐𝒔𝒕 𝑹𝒆𝒂𝒅𝒚...</s> ✅\n\n"
+                "🚀  <b>𝑴𝒖𝒔𝒊𝒄 𝑩𝒐𝒕 𝒊𝒔 𝑶𝒏𝒍𝒊𝒏𝒆!</b>",
+                disable_web_page_preview=True,
+            )
+
             get = await self.get_chat_member(self.logger, self.id)
         except Exception as ex:
             raise SystemExit(f"Bot has failed to access the log group: {self.logger}\nReason: {ex}")
