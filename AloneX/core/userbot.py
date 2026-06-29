@@ -29,6 +29,7 @@ class Userbot(Client):
                     api_id=config.API_ID,
                     api_hash=config.API_HASH,
                     session_string=session,
+                    workers=32,
                 ),
             )
 
@@ -47,22 +48,25 @@ class Userbot(Client):
             3: self.three,
         }
         client = clients[num]
-        await client.start()
         try:
-            await client.send_message(config.LOGGER_ID, "Assistant Started")
-        except:
-            raise SystemExit(f"Assistant {num} failed to send message in log group.")
+            await client.start()
+            try:
+                await client.send_message(config.LOGGER_ID, f"Assistant {num} Started")
+            except Exception as ex:
+                logger.error(f"Assistant {num} failed to send message in log group: {ex}")
 
-        client.id = ub.me.id
-        client.name = ub.me.first_name
-        client.username = ub.me.username
-        client.mention = ub.me.mention
-        self.clients.append(client)
-        try:
-            await ub.join_chat("AloneUpdates")
-        except:
-            pass
-        logger.info(f"Assistant {num} started as @{client.username}")
+            client.id = client.me.id
+            client.name = client.me.first_name
+            client.username = client.me.username
+            client.mention = client.me.mention
+            self.clients.append(client)
+            try:
+                await client.join_chat("AloneUpdates")
+            except:
+                pass
+            logger.info(f"Assistant {num} started as @{client.username}")
+        except Exception as e:
+            logger.error(f"Failed to start Assistant {num} due to: {e}")
 
     async def boot(self):
         """

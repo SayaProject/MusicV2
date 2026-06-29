@@ -74,7 +74,9 @@ class TgCall(PyTgCalls):
             return await self.play_next(chat_id) 
         logger.info(f"[play_media] Using file_path: {media.file_path}") 
 
-        ffmpeg_args = "-analyzeduration 10M -probesize 10M" 
+        ffmpeg_args = "-analyzeduration 500k -probesize 500k -threads 4" 
+        if media.file_path.startswith(("http://", "https://")): 
+            ffmpeg_args += " -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5" 
         if seek_time > 1: 
             ffmpeg_args += f" -ss {seek_time}" 
 
@@ -257,6 +259,8 @@ class TgCall(PyTgCalls):
 
 
     async def ping(self) -> float: 
+        if not self.clients: 
+            return 0.0 
         pings = [client.ping for client in self.clients] 
         return round(sum(pings) / len(pings), 2) 
 
