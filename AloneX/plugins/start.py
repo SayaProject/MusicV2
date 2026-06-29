@@ -31,6 +31,62 @@ async def start(_, message: types.Message):
         return await _help(_, message)
 
     private = message.chat.type == enums.ChatType.PRIVATE
+
+    # Start animation
+    msg = await message.reply_text(
+        "⚡  <b>𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</b>\n▰▱▱▱▱  20%",
+        disable_web_page_preview=True,
+    )
+    await asyncio.sleep(0.8)
+
+    await msg.edit_text(
+        "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
+        "🎧  <b>𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</b>\n▰▰▱▱▱  40%",
+        disable_web_page_preview=True,
+    )
+    await asyncio.sleep(0.8)
+
+    await msg.edit_text(
+        "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
+        "<s>🎧  𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✅\n"
+        "🔌  <b>𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</b>\n▰▰▰▱▱  60%",
+        disable_web_page_preview=True,
+    )
+    await asyncio.sleep(0.8)
+
+    await msg.edit_text(
+        "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
+        "<s>🎧  𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✅\n"
+        "<s>🔌  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</s> ✅\n"
+        "⚙️  <b>𝑰𝒏𝒊𝒕𝒊𝒂𝒍𝒊𝒔𝒊𝒏𝒈...</b>\n▰▰▰▰▱  80%",
+        disable_web_page_preview=True,
+    )
+    await asyncio.sleep(0.8)
+
+    await msg.edit_text(
+        "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
+        "<s>🎧  𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✅\n"
+        "<s>🔌  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</s> ✅\n"
+        "<s>⚙️  𝑰𝒏𝒊𝒕𝒊𝒂𝒍𝒊𝒔𝒊𝒏𝒈...</s> ✅\n"
+        "🚀  <b>𝑨𝒍𝒎𝒐𝒔𝒕 𝑹𝒆𝒂𝒅𝒚...</b>\n▰▰▰▰▰  100%",
+        disable_web_page_preview=True,
+    )
+    await asyncio.sleep(0.8)
+
+    await msg.edit_text(
+        "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
+        "<s>🎧  𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✅\n"
+        "<s>🔌  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</s> ✅\n"
+        "<s>⚙️  𝑰𝒏𝒊𝒕𝒊𝒂𝒍𝒊𝒔𝒊𝒏𝒈...</s> ✅\n"
+        "<s>🚀  𝑨𝒍𝒎𝒐𝒔𝒕 𝑹𝒆𝒂𝒅𝒚...</s> ✅\n\n"
+        "🚀  <b>𝑴𝒖𝒔𝒊𝒄 𝑩𝒐𝒕 𝒊𝒔 𝑶𝒏𝒍𝒊𝒏𝒆!</b>",
+        disable_web_page_preview=True,
+    )
+    await asyncio.sleep(0.5)
+
+    # Delete animation message
+    await msg.delete()
+
     _text = (
         message.lang["start_pm"].format(message.from_user.first_name, app.name)
         if private
