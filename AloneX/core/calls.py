@@ -256,6 +256,13 @@ class TgCall(PyTgCalls):
 
         media.message_id = msg.id 
         await self.play_media(chat_id, msg, media) 
+        # Send related-song suggestions in background
+        import asyncio as _asyncio
+        try:
+            from AloneX.plugins.suggestions import send_suggestions
+            _asyncio.create_task(send_suggestions(chat_id, media.title))
+        except Exception:
+            pass 
 
 
     async def ping(self) -> float: 
