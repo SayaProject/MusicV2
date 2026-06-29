@@ -43,7 +43,7 @@ class XBitAPI:
 
         youtube_url = f"https://www.youtube.com/watch?v={vid_id}"
         
-        # Try XBit first with direct URL
+        # Try XBit first with direct URL - download the file
         if self.xbit_api_key and self.xbit_base_url:
             try:
                 info = await self.get_info(vid_id)
@@ -51,23 +51,22 @@ class XBitAPI:
                     url_key = 'video_url' if video else 'audio_url'
                     if url_key in info and info[url_key]:
                         direct_url = info[url_key]
-                        print(f"Successfully got direct URL for {vid_id} using XBit API")
-                        return direct_url
+                        print(f"Successfully got direct URL for {vid_id} using XBit API, downloading...")
+                        async with aiohttp.ClientSession() as session:
+                            async with session.get(direct_url, timeout=300) as response:
+                                if response.status == 200:
+                                    with open(path, "wb") as f:
+                                        async for chunk in response.content.iter_chunked(1024 * 1024):
+                                            f.write(chunk)
+                                    if os.path.exists(path) and os.path.getsize(path) > 1024:
+                                        print(f"Successfully downloaded {vid_id} using XBit API")
+                                        return path
             except Exception as e:
-                print(f"Error getting direct URL from XBit API: {e}")
+                print(f"Error downloading from XBit API: {e}")
         
         # Fallback to ARU
         if self.aru_api_key and self.aru_base_url:
             direct_url = f"{self.aru_base_url}/download?url={youtube_url}&type={'video' if video else 'audio'}&api_key={self.aru_api_key}"
-            try:
-                async with aiohttp.ClientSession() as session:
-                    async with session.head(direct_url, timeout=10) as resp:
-                        if resp.status == 200:
-                            print(f"Successfully got direct URL for {vid_id} using ARU API")
-                            return direct_url
-            except Exception as e:
-                print(f"Error checking ARU direct URL for {vid_id}: {e}")
-            
             try:
                 async with aiohttp.ClientSession() as session:
                     async with session.get(direct_url, timeout=300) as response:
