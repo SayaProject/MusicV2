@@ -25,7 +25,7 @@ class Config:
         self.AUTO_LEAVE: bool = getenv("AUTO_LEAVE", False)
         self.VIDEO_PLAY: bool = getenv("VIDEO_PLAY", True)
 
-        self.QUEUE_LIMIT = int(getenv("QUEUE_LIMIT", "50"))
+        self.QUEUE_LIMIT = int(getenv("QUEUE_LIMIT", "5400000000"))
         self.DURATION_LIMIT = int(getenv("DURATION_LIMIT", "5400000000"))
         self.PLAYLIST_LIMIT = int(getenv("PLAYLIST_LIMIT", "20000000"))
         self.COOKIES_URL = [
