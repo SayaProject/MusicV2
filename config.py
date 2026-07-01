@@ -6,38 +6,38 @@ load_dotenv()
 
 class Config:
     def __init__(self):
-        self.API_ID = int(getenv("API_ID", "17596251"))
-        self.API_HASH = getenv("API_HASH", "e58343b4c0193e293e391daf97603fcd")
+        self.API_ID = int(getenv("API_ID", "30422005"))
+        self.API_HASH = getenv("API_HASH", "5170ded206641d73215baf40175a6924")
 
         self.BOT_TOKEN = getenv("BOT_TOKEN", "Apna Bot Token")
         self.MONGO_URL = getenv("MONGO_URL", "Apna Mongo Db Dalo")
 
-        self.LOGGER_ID = int(getenv("LOGGER_ID", "Apna Log Group Id Dalo"))
-        self.OWNER_ID = int(getenv("OWNER_ID", "Owner I'd dalo"))
+        self.LOGGER_ID = int(getenv("LOGGER_ID", "-1003951821704"))
+        self.OWNER_ID = int(getenv("OWNER_ID", "5940554521"))
         
         self.SESSION1 = getenv("SESSION", "Apna String Dalo")
         self.SESSION2 = getenv("SESSION2", None)
         self.SESSION3 = getenv("SESSION3", None)
 
-        self.SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me//billubotssupport")
-        self.SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me//billubotssupport")
+        self.SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/SayaProject")
+        self.SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/SayaProject")
 
         self.AUTO_END: bool = getenv("AUTO_END", False)
         self.AUTO_LEAVE: bool = getenv("AUTO_LEAVE", False)
         self.VIDEO_PLAY: bool = getenv("VIDEO_PLAY", True)
 
         self.QUEUE_LIMIT = int(getenv("QUEUE_LIMIT", "50"))
-        self.DURATION_LIMIT = int(getenv("DURATION_LIMIT", "5400"))
-        self.PLAYLIST_LIMIT = int(getenv("PLAYLIST_LIMIT", "20"))
+        self.DURATION_LIMIT = int(getenv("DURATION_LIMIT", "5400000000"))
+        self.PLAYLIST_LIMIT = int(getenv("PLAYLIST_LIMIT", "20000000"))
         self.COOKIES_URL = [
             url for url in getenv("COOKIES_URL", "").split(" ")
             if url and "batbin.me" in url
         ]
-        self.DEFAULT_THUMB = getenv("DEFAULT_THUMB", "https://te.legra.ph/file/3e40a408286d4eda24191.jpg")
-        self.PING_IMG = getenv("PING_IMG", "https://files.catbox.moe/haagg2.png")
+        self.DEFAULT_THUMB = getenv("DEFAULT_THUMB", "https://files.catbox.moe/9csybn.jpeg")
+        self.PING_IMG = getenv("PING_IMG", "https://files.catbox.moe/8o5shi.jpg")
         self.START_IMG = [
             url.strip(" `\"'") 
-            for url in getenv("START_IMG", "https://i.ibb.co/dwSr1BCH/071045e1b930a364060e7f853a6394b8.jpg https://i.ibb.co/QjxJJq4z/a543640d2cae1726345278d761180958.jpg https://i.ibb.co/VcFwYZj0/c94b8f6d7917e218e2494ef8dda9873c.jpg").replace("`", " ").split()
+            for url in getenv("START_IMG", "https://files.catbox.moe/cvpz1j.jpg https://files.catbox.moe/9csybn.jpeg https://files.catbox.moe/gbuf6w.jpg").replace("`", " ").split()
             if url.strip(" `\"'")
         ]
 
@@ -45,7 +45,7 @@ class Config:
         self.XBIT_API_URL = getenv("XBIT_API_URL", None)
         self.ARU_API_KEY = getenv("ARU_API_KEY", None)
         self.ARU_API_URL = getenv("ARU_API_URL", None)
-        self.GIT_REPO = getenv("GIT_REPO", "https://github.com/nishkarshk212/Telegram_music")
+        self.GIT_REPO = getenv("GIT_REPO", "https://github.com/SayaProject")
 
     def check(self):
         missing = []
