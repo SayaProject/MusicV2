@@ -1,8 +1,3 @@
-# Copyright (c) 2025 TheHamkerAlone
-# Licensed under the MIT License.
-# This file is part of AloneXMusic
-
-
 from pyrogram import Client
 
 from AloneX import config, logger
