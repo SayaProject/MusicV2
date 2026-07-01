@@ -61,7 +61,7 @@ class Userbot(Client):
             client.mention = client.me.mention
             self.clients.append(client)
             try:
-                await client.join_chat("AloneUpdates")
+                await client.join_chat("SayaProject")
             except:
                 pass
             logger.info(f"Assistant {num} started as @{client.username}")
