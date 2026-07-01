@@ -1,8 +1,3 @@
-# Copyright (c) 2025 TheHamkerAlone 
-# Licensed under the MIT License.
-# This file is part of AloneXMusic
-
-
 import pyrogram
 from pyrogram.types import InlineKeyboardMarkup, ReplyKeyboardMarkup
 
@@ -65,7 +60,7 @@ class Bot(pyrogram.Client):
             # ── Step 1 : Loading Modules ─────────────────────────────────────
             msg = await self.send_message(
                 self.logger,
-                "⚡  <b>𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</b>\n▰▱▱▱▱  20%",
+                "<b>𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</b>\n▰▱▱▱  25%",
                 disable_web_page_preview=True,
             )
             await asyncio.sleep(1.2)
@@ -74,8 +69,8 @@ class Bot(pyrogram.Client):
             await self.edit_message_text(
                 self.logger,
                 msg.id,
-                "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
-                "🎧  <b>𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</b>\n▰▰▱▱▱  40%",
+                "<s>𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✓\n"
+                "<b>𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</b>\n▰▰▱▱  50%",
                 disable_web_page_preview=True,
             )
             await asyncio.sleep(1.2)
@@ -84,48 +79,32 @@ class Bot(pyrogram.Client):
             await self.edit_message_text(
                 self.logger,
                 msg.id,
-                "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
-                "<s>🎧  𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✅\n"
-                "🔌  <b>𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</b>\n▰▰▰▱▱  60%",
+                "<s>𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✓\n"
+                "<s>𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✓\n"
+                "<b>𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</b>\n▰▰▰▱  75%",
                 disable_web_page_preview=True,
             )
             await asyncio.sleep(1.2)
 
-            # ── Step 4 : Initialising ────────────────────────────────────────
+            # ── Step 4 : Almost Ready ────────────────────────────────────────
             await self.edit_message_text(
                 self.logger,
                 msg.id,
-                "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
-                "<s>🎧  𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✅\n"
-                "<s>🔌  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</s> ✅\n"
-                "⚙️  <b>𝑰𝒏𝒊𝒕𝒊𝒂𝒍𝒊𝒔𝒊𝒏𝒈...</b>\n▰▰▰▰▱  80%",
+                "<s>𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✓\n"
+                "<s>𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✓\n"
+                "<s>𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</s> ✓\n"
+                "<b>𝑨𝒍𝒎𝒐𝒔𝒕 𝑹𝒆𝒂𝒅𝒚...</b>\n▰▰▰▰  100%",
                 disable_web_page_preview=True,
             )
             await asyncio.sleep(1.2)
 
-            # ── Step 5 : Almost Ready ────────────────────────────────────────
+            # ── Final : Music Bot Started ─────────────────────────────────────
             await self.edit_message_text(
                 self.logger,
                 msg.id,
-                "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
-                "<s>🎧  𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✅\n"
-                "<s>🔌  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</s> ✅\n"
-                "<s>⚙️  𝑰𝒏𝒊𝒕𝒊𝒂𝒍𝒊𝒔𝒊𝒏𝒈...</s> ✅\n"
-                "🚀  <b>𝑨𝒍𝒎𝒐𝒔𝒕 𝑹𝒆𝒂𝒅𝒚...</b>\n▰▰▰▰▰  100%",
-                disable_web_page_preview=True,
-            )
-            await asyncio.sleep(1.2)
-
-            # ── Final : Bot is Online ────────────────────────────────────────
-            await self.edit_message_text(
-                self.logger,
-                msg.id,
-                "<s>⚡  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑴𝒐𝒅𝒖𝒍𝒆𝒔...</s> ✅\n"
-                "<s>🎧  𝑪𝒐𝒏𝒏𝒆𝒄𝒕𝒊𝒏𝒈 𝑽𝒐𝒊𝒄𝒆 𝑪𝒉𝒂𝒕...</s> ✅\n"
-                "<s>🔌  𝑳𝒐𝒂𝒅𝒊𝒏𝒈 𝑷𝒍𝒖𝒈𝒊𝒏𝒔...</s> ✅\n"
-                "<s>⚙️  𝑰𝒏𝒊𝒕𝒊𝒂𝒍𝒊𝒔𝒊𝒏𝒈...</s> ✅\n"
-                "<s>🚀  𝑨𝒍𝒎𝒐𝒔𝒕 𝑹𝒆𝒂𝒅𝒚...</s> ✅\n\n"
-                "🚀  <b>𝑴𝒖𝒔𝒊𝒄 𝑩𝒐𝒕 𝒊𝒔 𝑶𝒏𝒍𝒊𝒏𝒆!</b>",
+                "<b>𝑴𝒖𝒔𝒊𝒄 𝑩𝒐𝒕 𝑺𝒕𝒂𝒓𝒕𝒆𝒅!</b>\n"
+                f"@{self.username} — 𝑴𝒖𝒔𝒊𝒄 𝑩𝒐𝒕\n"
+                f"<i>𝒑𝒐𝒘𝒆𝒓𝒆𝒅 𝒃𝒚 @SayaProject</i>",
                 disable_web_page_preview=True,
             )
 
