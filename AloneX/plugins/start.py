@@ -100,12 +100,24 @@ async def start(_, message: types.Message):
             if button.text == message.lang["source"]:
                 button.url = config.GIT_REPO
 
-    await message.reply_photo(
-        photo=random.choice(config.START_IMG),
-        caption=_text,
-        reply_markup=key,
-        quote=not private,
-    )
+    try:
+        await message.reply_photo(
+            photo=random.choice(config.START_IMG),
+            caption=_text,
+            reply_markup=key,
+            quote=not private,
+        )
+    except Exception as e:
+        # Handle privacy restrictions and other button-related errors
+        if "BUTTON_USER_PRIVACY_RESTRICTED" in str(e):
+            # Send text-only response without inline buttons
+            await message.reply_text(
+                text=_text,
+                quote=not private,
+            )
+        else:
+            # Re-raise other exceptions
+            raise
 
     if private:
         if await db.is_user(message.from_user.id):
